@@ -3,15 +3,15 @@ from re import sub
 from typing import List
 
 mapping = (
-    ('one', 1),
-    ('two', 2),
-    ('three', 3),
-    ('four', 4),
-    ('five', 5),
-    ('six', 6),
-    ('seven', 7),
-    ('eight', 8),
-    ('nine', 9),
+    ('one', "o1e"),
+    ('two', "t2o"),
+    ('three', "t3e"),
+    ('four', "f4r"),
+    ('five', "f5e"),
+    ('six', "s6x"),
+    ('seven', "s7n"),
+    ('eight', "e8t"),
+    ('nine', "n9e"),
 )
 
 
@@ -22,7 +22,7 @@ def replacer(lines: List[str]) -> List[str]:
         for i in range(len(line)):  # backwards: , -1, -1):
             for str_, int_ in mapping:
                 pattern = f"(^\\w{{{i}}}){str_}"
-                func_ = lambda match: match.group(1) + str(int_)
+                func_ = lambda match: match.group(1) + int_
                 line = sub(pattern, func_, line)
         print(line)
         results.append(line)

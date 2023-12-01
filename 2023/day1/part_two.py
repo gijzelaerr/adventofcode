@@ -19,11 +19,11 @@ def replacer(lines: List[str]) -> List[str]:
     results = []
     for line in lines:
         line = line.strip()
-        for i in range(len(line)):
+        for i in range(len(line)):  # backwards: , -1, -1):
             for str_, int_ in mapping:
                 pattern = f"(^\\w{{{i}}}){str_}"
-                replacement_func = lambda match: match.group(1) + str(int_)
-                line = sub(pattern, replacement_func, line)
+                func_ = lambda match: match.group(1) + str(int_)
+                line = sub(pattern, func_, line)
         print(line)
         results.append(line)
     return results

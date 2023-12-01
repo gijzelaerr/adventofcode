@@ -13,6 +13,10 @@ def extract_nums(lines: List[str]):
     return total
 
 
-if __name__ == '__main__':
-    total = extract_nums(open('input.txt').readlines())
+def main(file: str):
+    total = extract_nums(open(file).readlines())
     print(f"total: {total}")
+
+
+if __name__ == '__main__':
+    main('input.txt')

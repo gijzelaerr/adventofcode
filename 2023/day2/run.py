@@ -26,21 +26,21 @@ def doit_return_cubes(file: str, max_red: int, max_green: int, max_blue: int):
     games = []
     for line in open(file).readlines():
         game_str, draw_str = line.split(":")
-        game = game_str.strip().split()[1]
+        game = int(game_str.strip().split()[1])
         draws = draw_str.strip().split(';')
-        print(game)
+        games.append(game)
         for draw in draws:
             blue = red = green = 0
             for cube in draw.split(','):
                 count, color = cube.strip().split()
-                if color == 'blue':
-                    blue += int(count)
-                elif color == 'red':
-                    red += int(count)
-                elif color == 'green':
-                    green += int(count)
+                if color == 'blue': blue = int(count)
+                elif color == 'red': red = int(count)
+                elif color == 'green': green = int(count)
+                else:
+                    raise Exception
             if blue > max_blue or green > max_green or red > max_red:
                 invalid_games.append(game)
+                print("invalid!")
             print(f"\t{blue=}\t{red=}\t{green=}")
     valid_games = set(games) - set(invalid_games)
     return list(valid_games)

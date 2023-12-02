@@ -25,10 +25,9 @@ def doit_return_cubes(file: str, max_red: int, max_green: int, max_blue: int):
     invalid_games = []
     games = []
     for line in open(file).readlines():
-        split = line.split(":")
-        game = int(split[0][5])
-        games.append(game)
-        draws = split[1].strip().split(';')
+        game_str, draw_str = line.split(":")
+        game = game_str.strip().split()[1]
+        draws = draw_str.strip().split(';')
         print(game)
         for draw in draws:
             blue = red = green = 0

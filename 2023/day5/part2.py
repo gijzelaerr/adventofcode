@@ -1,76 +1,86 @@
+def part1(seeds, mappers):
+    print("Part 1:", min([translate(mappers, 'seed', 'location', seed) for seed in seeds]))
 
 
-
-order = [
-    'seed-to-soil',
-    'soil-to-fertilizer',
-    'fertilizer-to-water',
-    'water-to-light',
-    'light-to-temperature',
-    'temperature-to-humidity',
-    'humidity-to-location'
-]
-
-def double_pairs(l):
-    from itertools import groupby
-    x = [list(group) for index, group in groupby(enumerate(l), lambda x: x[0] // 2)]
-    return [i[1] for i in x]
+def part2(seeds, mappers):
+    results = [expand(mappers, 'seed', 'location', seed_range) for seed_range in zip(seeds[0::2], seeds[1::2])]
+    results = [item for sublist in results for item in sublist]
+    print("Part 2:", min(x[0] for x in results))
 
 
-def extract_data(file: str):
-    lines = open(file).read()
-    seeds = []
-    maps = {}
-    for group in lines.split('\n\n'):
-        label, value_lines = group.split(':')
-        label = label.strip()
-        value_lines = value_lines.strip()
+def expand(mappers, source, dest, seed_range) -> list:
+    if source == dest:
+        return [seed_range]
+    mapping = mappers[source]
+    expanded = []
+    for dest_start, source_start, length in mapping[1]:
+        if seed_range[0] < source_start < seed_range[0] + seed_range[1] <= source_start + length:
+            left_range = (seed_range[0], source_start - seed_range[0])
+            right_range = (dest_start, seed_range[1] - left_range[1])
+            expanded = expanded + expand(mappers, mapping[0], dest, right_range) \
+                        + expand(mappers, source, dest, left_range)
+            break
+        elif source_start <= seed_range[0] < source_start + length < seed_range[0] + seed_range[1]:
+            left_range = (dest_start + seed_range[0] - source_start, source_start + length - seed_range[0])
+            right_range = (source_start + length, seed_range[0] + seed_range[1] - source_start - length)
+            expanded = expanded + expand(mappers, mapping[0], dest, left_range) + \
+                        expand(mappers, source, dest, right_range)
+            break
+        elif seed_range[0] >= source_start and seed_range[0] + seed_range[1] <= source_start + length:
+            expanded = expanded + expand(mappers, mapping[0], dest,
+                                         (dest_start + seed_range[0] - source_start, seed_range[1]))
+            break
+        elif seed_range[0] < source_start and seed_range[0] + seed_range[1] > source_start + length:
+            left_range = (seed_range[0], source_start - seed_range[0])
+            right_range = (source_start + length, seed_range[0] + seed_range[1] - source_start - length)
+            middle_range = (dest_start, length)
+            expanded = expanded + expand(mappers, source, dest, right_range) + \
+                       expand(mappers, mapping[0], dest, middle_range) + \
+                       expand(mappers, source, dest, left_range)
+            break
 
-        if label == 'seeds':
-            seeds = [int(i) for i in value_lines.split()]
-        else:
-            map_type = label.split()[0]
-            maps[map_type] = []
-            for value_line in value_lines.split('\n'):
-                dest_range_start, src_range_start, range_len = [int(i) for i in value_line.split()]
-                maps[map_type].append((dest_range_start, src_range_start, range_len))
-    return seeds, maps
+    if not expanded:
+        expanded = expanded + expand(mappers, mapping[0], dest, seed_range)
 
-
-def main(file):
-    seeds, maps = extract_data(file)
-    lowest = -1
-    for i in range(0, len(seeds), 2):
-        start = seeds[i]
-        number = seeds[i+1]
-        for seed in range(start, start+number):
-            next_from = seed
-            path = []
-            for step in order:
-                will_be_next = None
-                for line in maps[step]:
-                    dest_range_start, src_range_start, range_len = line
-                    if src_range_start <= next_from <= src_range_start + range_len:
-                        will_be_next = dest_range_start + next_from - src_range_start
-                        break
-                if will_be_next:
-                    next_from = will_be_next
-                path.append(next_from)
-            if lowest > path[-1] or lowest == -1:
-                lowest = path[-1]
-    return lowest
+    return expanded
 
 
-def min_location(results):
-    return min(i[-1] for i in results.values())
+def translate(mappers, source, dest, value):
+    if source == dest:
+        return value
+    mapping = mappers[source]
+    for dest_start, source_start, length in mapping[1]:
+        if source_start <= value < source_start + length:
+            return translate(mappers, mapping[0], dest, dest_start + (value - source_start))
+    return translate(mappers, mapping[0], dest, value)
 
 
+def make_map(data):
+    map_data = data.splitlines()
+    source_map, dest_map = map_data[0].split()[0].split('-')[0], map_data[0].split()[0].split('-')[2]
+    translation = [list(map(int, x.split())) for x in map_data[1:]]
+    return source_map, dest_map, translation
 
-print("""test, answer should be:
-lowest location is 46
------
-""")
-print(main('input_test.txt'))
 
-print("----")
-print(main('input.txt'))
+def read_map(file: str):
+    with open(file) as f:
+        data = f.read().split('\n\n')
+
+    seeds = [int(x) for x in data[0].split()[1:]]
+    mappers = {make_map(mapper)[0]: make_map(mapper)[1:] for mapper in data[1:]}
+    return seeds, mappers
+
+
+def main():
+    print("----")
+    seeds, mappers = read_map('input_test.txt')
+    part1(seeds, mappers)
+    part2(seeds, mappers)
+    print("----")
+    seeds, mappers = read_map('input.txt')
+    part1(seeds, mappers)
+    part2(seeds, mappers)
+
+
+if __name__ == "__main__":
+    main()

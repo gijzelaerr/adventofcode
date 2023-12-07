@@ -30,7 +30,7 @@ def get_top_or_bottom(lines: List[str], y: int, x: int, check_top: bool) -> (int
             right_num = find_full_number(lines, y, x + 1)
     else:
         left_num = find_full_number(lines, y, x)
-    return (left_num + right_num, left_num, right_num)
+    return left_num + right_num, left_num, right_num
 
 
 def get_gear_ratio(lines: List[str], y: int, x: int):

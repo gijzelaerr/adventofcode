@@ -18,7 +18,7 @@ def doit(file: str):
     return counter
 
 
-result = doit('input_test.txt')
+result = doit('test.txt')
 print(f"should be 2: {result}")
 result = doit('input_test2.txt')
 print(f"should be 6: {result}")

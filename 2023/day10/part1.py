@@ -44,7 +44,7 @@ def doit1(file):
 
 if __name__ == '__main__':
     print("test: should be 4")
-    dists = doit1('input_test.txt')
+    dists = doit1('test.txt')
     print(f"Part 1: {max(dists.values())}")
     dists = doit1('input.txt')
     print(f"Part 1: {max(dists.values())}")

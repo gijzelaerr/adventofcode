@@ -19,8 +19,8 @@ def doit2(file):
         yield sum(x * comb(n, i) * (-1) ** (n - 1 - i) for i, x in enumerate(nums))
 
 
-print(list(doit('input_test.txt')))
-print(list(doit2('input_test.txt')))
+print(list(doit('test.txt')))
+print(list(doit2('test.txt')))
 print("should be: [18, 28, 68] sum: 114")
 print("----")
 print(sum(doit('input.txt')))

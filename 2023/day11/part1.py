@@ -53,6 +53,6 @@ def doit(file):
 
 
 print("test, should be 374")
-doit('input_test.txt')
+doit('test.txt')
 print("------")
 doit('input.txt')

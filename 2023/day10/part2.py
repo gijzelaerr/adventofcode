@@ -32,7 +32,7 @@ def doit(file):
 
 
 print("test: should be 10")
-results = doit('input_test.txt')
+results = doit('test.txt')
 print(f"Part 2: {results}")
 results = doit('input.txt')
 print(f"Part 2: {results}")

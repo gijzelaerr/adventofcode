@@ -19,8 +19,8 @@ def doit2(file):
         yield sum(x * comb(n, i + 1) * (-1) ** i for i, x in enumerate(row))
 
 
-print(list(doit('input_test.txt')))
-print(list(doit2('input_test.txt')))
+print(list(doit('test.txt')))
+print(list(doit2('test.txt')))
 print("should be: [5, -3, 0] sum: 2")
 print("----")
 print(sum(doit('input.txt')))

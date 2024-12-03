@@ -1,22 +1,22 @@
 import numpy as np
 
+
 def is_safe(b):
     return np.all((b >= 1) & (b < 4)) | np.all((b > -4) & (b <= -1))
 
+
 def f(p):
-    safes = []
     for line in open(p):
         b = np.array(line.split(), dtype=int)
         if is_safe(np.diff(b)):
-            safes.append(True)
+            yield True
         else:
             for i in range(b.size):
                 if is_safe(np.diff(np.delete(b, i))):
-                    safes.append(True)
+                    yield True
                     break
-            safes.append(False)
-    return np.sum(np.array(safes))
+            yield False
 
 
-print(f('test.txt'))
-print(f('input.txt'))
+print(sum(f('test.txt')))
+print(sum(f('input.txt')))

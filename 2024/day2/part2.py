@@ -11,8 +11,7 @@ def f(p):
             safes.append(True)
         else:
             for i in range(b.size):
-                c = np.delete(b, i)
-                if is_safe(np.diff(c)):
+                if is_safe(np.diff(np.delete(b, i))):
                     safes.append(True)
                     break
             safes.append(False)

@@ -1,12 +1,11 @@
 import numpy as np
 
+def is_safe(l):
+    b = np.diff(np.array(l.split(), dtype=int))
+    return np.all((b >= 1) & (b < 4)) | np.all((b > -4) & (b <= -1))
+
 def f(p):
-    safes = []
-    for line in open(p):
-        b = np.diff(np.array(line.split(), dtype=int))
-        safe = np.all((b >= 1) & (b < 4)) | np.all((b > -4) & (b <= -1))
-        safes.append(safe)
-    return np.sum(np.array(safes))
+    return sum(is_safe(l) for l in open(p))
 
 
 print(f('test.txt'))

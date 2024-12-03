@@ -1,6 +1,6 @@
-import re
+from re import compile
 
-c = re.compile(r'mul\((\d{0,3}),(\d{0,3})\)')
+c = compile(r'mul\((\d{0,3}),(\d{0,3})\)')
 
 def f(p):
     return sum(int(a) * int(b) for a, b in  c.findall(open(p).read()))

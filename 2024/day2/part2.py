@@ -1,18 +1,18 @@
-import numpy as np
+from numpy import array, diff, delete
 
 
-def is_safe(b):
-    return np.all((b >= 1) & (b < 4)) | np.all((b > -4) & (b <= -1))
+def safe(b):
+    return all((b >= 1) & (b < 4)) | all((b > -4) & (b <= -1))
 
 
 def f(p):
     for line in open(p):
-        b = np.array(line.split(), dtype=int)
-        if is_safe(np.diff(b)):
+        b = array(line.split(), dtype=int)
+        if safe(diff(b)):
             yield True
         else:
             for i in range(b.size):
-                if is_safe(np.diff(np.delete(b, i))):
+                if safe(diff(delete(b, i))):
                     yield True
                     break
             yield False

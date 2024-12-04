@@ -21,5 +21,5 @@ def f(p):
         yield c(flip(diag(flip(a, 1), i)))
 
 
-print(sum(f('test2.txt')))  # should give 18
+print(sum(f('test1a.txt')))  # should give 18
 print(sum(f('input.txt')))

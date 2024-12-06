@@ -12,25 +12,23 @@ def f(p):
     a = array([list(l.strip()) for l in open(p).readlines()])
     ori = '^'
     pos = tuple(i[0] for i in where(a == ori))
-    visited = [pos]
+    v = set(pos)
 
     while True:
         dx, dy, next, gp = dirs[ori]
-
         path = gp(a, pos)
         end = where(path == '#')[0]
-        if len(end) == 0:
+        if not len(end):
             steps = len(path)
         else:
             steps = end[0]
         for i in range(steps):
-            visited.append(pos := (pos[0] + dx, pos[1] + dy))
-        if len(end) == 0:
+            v |= {pos := (pos[0] + dx, pos[1] + dy)}
+        if not len(end):
             break
-
         ori = next
 
-    return len(set(visited))
+    return len(set(v))
 
 
 print(f('test.txt'))

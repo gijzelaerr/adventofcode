@@ -1,3 +1,5 @@
+import timeit
+
 def walk(G, start, part=1):
     pos, dir = start, -1
     seen = set()
@@ -24,5 +26,5 @@ def f(p):
     print(f"2: {sum(walk(a | {o: '#'}, start) for o in path)}")
 
 
-f('test.txt')
-f('input.txt')
+#f('test.txt')
+print(timeit.timeit(lambda: f('input.txt'), number=2))

@@ -1,17 +1,17 @@
 from itertools import product
+from operator import add, mul
 
-o1 = (
-    lambda a, b: a * b,
-    lambda a, b: a + b,
-)
+o1 = (add, mul)
 
 o2 = o1 + (lambda a, b: int(str(a) + str(b)),)
 
 
 def f(p, o=o1):
-    d = {int(a): list(map(int, b.split())) for a, b in [i.split(":") for i in open(p).readlines()]}
+    for l in open(p):
+        x = l.split()
+        x[0] = x[0][:-1]
+        k, *v = map(int, x)
 
-    for k, v in d.items():
         for x in product(o, repeat=len(v) - 1):
             cursor = v[0]
             for i in range(len(x)):
